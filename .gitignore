@@ -15,3 +15,8 @@ installer/output/
 __pycache__/
 *.pyc
 Thumbs.db
+
+# C# (WPF) version: kept locally, not in the repo
+Notepad9/
+installer/Notepad9.iss
+installer/build-installer.cmd
