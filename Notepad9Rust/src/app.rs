@@ -68,6 +68,7 @@ pub enum ModalAction {
     Reload(u64),
     ResetSettings,
     RemovePlugin(usize),
+    DeletePath(PathBuf),
 }
 
 pub struct Modal {
@@ -140,6 +141,8 @@ pub struct App {
     pub tab_drag: Option<u64>,
     pub ctx: egui::Context,
     pub plugins: crate::plugins::Plugins,
+    pub side: crate::sidebar::Sidebar,
+    pub palette: crate::palette::CommandPalette,
 }
 
 fn now_secs(ctx: &egui::Context) -> f64 {
@@ -203,6 +206,8 @@ impl App {
             tab_drag: None,
             ctx: ctx.clone(),
             plugins: Default::default(),
+            side: Default::default(),
+            palette: Default::default(),
         };
         app.find.opts = Opts {
             find: app.s.last_find.clone(),
@@ -217,6 +222,9 @@ impl App {
         }
         for f in files {
             app.open_path(Path::new(&f));
+        }
+        if !app.s.sidebar_root.is_empty() && !Path::new(&app.s.sidebar_root).is_dir() {
+            app.s.sidebar_root.clear();
         }
         if app.tabs.is_empty() {
             app.new_tab();
@@ -383,6 +391,11 @@ impl App {
     /// Open a file in a tab (switches to it if it is already open).
     pub fn open_path(&mut self, path: &Path) -> bool {
         let path = std::fs::canonicalize(path).map(strip_unc).unwrap_or_else(|_| path.to_path_buf());
+        // a folder opens in the sidebar
+        if path.is_dir() {
+            self.set_folder(&path);
+            return true;
+        }
         if let Some(i) = self.tabs.iter().position(|t| t.path.as_deref().map_or(false, |p| same_path(p, &path))) {
             self.activate(i);
             return true;
@@ -610,6 +623,7 @@ impl App {
                 }
             }
             ModalAction::RemovePlugin(pi) => self.plugin_remove_confirmed(pi),
+            ModalAction::DeletePath(p) => self.delete_path_confirmed(&p),
             ModalAction::ResetSettings => {
                 AppSettings::reset();
                 self.s.save_on_exit = false;
@@ -797,6 +811,22 @@ impl App {
                 }
             }
             "open" => self.open_dialog(),
+            "palette" => self.palette.toggle(),
+            "sidebar" => self.s.show_sidebar = !self.s.show_sidebar,
+            "open_dir" => {
+                let start = self.sidebar_root().or_else(|| self.tab().dir());
+                let mut dlg = rfd::FileDialog::new();
+                if let Some(d) = start {
+                    dlg = dlg.set_directory(d);
+                }
+                if let Some(d) = dlg.pick_folder() {
+                    self.set_folder(&std::fs::canonicalize(&d).map(strip_unc).unwrap_or(d));
+                }
+            }
+            "close_dir" => {
+                self.s.sidebar_root.clear();
+                self.side.reset();
+            }
             "reload" => {
                 if self.tab().modified() {
                     let id = self.tab().id;
@@ -1262,6 +1292,7 @@ impl App {
         let focused = ctx.input(|i| i.viewport().focused.unwrap_or(true));
         if focused && !self.was_focused {
             self.check_external(self.active);
+            self.side.refresh();
         }
         self.was_focused = focused;
         // syntax resolved once the grammars are loaded
@@ -1397,6 +1428,8 @@ pub const KEYS: &[(bool, bool, bool, Key, &str)] = &[
     (true, true, false, Key::H, "md_heading"),
     (true, true, false, Key::V, "md_preview"),
     (true, false, true, Key::P, "customize"),
+    (true, true, false, Key::P, "palette"),
+    (true, true, false, Key::E, "sidebar"),
 ];
 
 /// Commands that act on the text: only while the editor has the keyboard.

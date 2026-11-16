@@ -62,6 +62,12 @@ pub struct AppSettings {
     pub favorites: Vec<String>,
     /// plugin file names (without .dll) that are not loaded
     pub disabled_plugins: Vec<String>,
+    pub show_sidebar: bool,
+    /// folder shown in the sidebar ("" = none)
+    pub sidebar_root: String,
+    pub sidebar_width: f32,
+    /// commands run from the palette, newest first
+    pub palette_recent: Vec<String>,
 }
 
 impl Default for AppSettings {
@@ -113,6 +119,10 @@ impl Default for AppSettings {
             recent: Vec::new(),
             favorites: Vec::new(),
             disabled_plugins: Vec::new(),
+            show_sidebar: false,
+            sidebar_root: String::new(),
+            sidebar_width: 250.0,
+            palette_recent: Vec::new(),
         }
     }
 }

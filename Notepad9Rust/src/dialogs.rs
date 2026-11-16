@@ -220,6 +220,7 @@ const SHORTCUTS: &[(&str, &str)] = &[
     ("Ctrl+`", "Show / hide console"), ("Ctrl+Space", "Complete word"), ("Ctrl+F / Ctrl+H", "Find / Replace"),
     ("F3 / Shift+F3", "Find next / previous"), ("Ctrl+Shift+F", "Find in files"), ("Ctrl+G", "Go to line"),
     ("Alt+Z", "Word wrap"), ("Ctrl+Alt+F", "Focused view"), ("Ctrl+Plus / Minus / 0", "Zoom in / out / reset"),
+    ("Ctrl+Shift+P", "Command palette"), ("Ctrl+Shift+E", "Show / hide the sidebar (folder tree)"),
     ("Ctrl+D / Ctrl+Shift+D", "Duplicate / delete line"), ("Alt+Up / Alt+Down", "Move line"),
     ("Ctrl+Shift+U / Ctrl+U", "UPPERCASE / lowercase"), ("Ctrl+F5", "Insert date and time"), ("Insert", "Insert / overwrite"),
     ("Alt+T", "Always on top"), ("Markdown: Ctrl+B / I / K", "Bold / italic / link"), ("Markdown: Ctrl+Shift+H", "Heading level"),

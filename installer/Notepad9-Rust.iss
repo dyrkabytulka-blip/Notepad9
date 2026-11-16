@@ -51,14 +51,16 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "ru"; MessagesFile: "compiler:Languages\Russian.isl"
 
 [CustomMessages]
-en.ContextMenu=Add "Edit in Notepad9" to the right-click menu of every file
-ru.ContextMenu=Добавить «Edit in Notepad9» в меню правой кнопки для любых файлов
+en.ContextMenu=Add "Edit in Notepad9" to the right-click menu of files and folders
+ru.ContextMenu=Добавить Notepad9 в меню правой кнопки для файлов и папок
 en.OpenWith=Show Notepad9 in "Open with" for text and source files
 ru.OpenWith=Показывать Notepad9 в «Открыть с помощью» для текстовых файлов и исходников
 en.Integration=Windows integration:
 ru.Integration=Интеграция с Windows:
 en.EditIn=Edit in Notepad9
 ru.EditIn=Edit in Notepad9
+en.OpenFolderIn=Open in Notepad9
+ru.OpenFolderIn=Открыть в Notepad9
 en.LaunchApp=Launch Notepad9
 ru.LaunchApp=Запустить Notepad9
 en.Plugins=Install example plugins (Word Stats, TODO List, Text Tools)
@@ -99,6 +101,13 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopico
 Root: HKA; Subkey: "Software\Classes\*\shell\Notepad9"; ValueType: string; ValueName: ""; ValueData: "{cm:EditIn}"; Flags: uninsdeletekey; Tasks: contextmenu
 Root: HKA; Subkey: "Software\Classes\*\shell\Notepad9"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\{#AppExe}"",0"; Tasks: contextmenu
 Root: HKA; Subkey: "Software\Classes\*\shell\Notepad9\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"" ""%1"""; Tasks: contextmenu
+; folders: open the folder in the sidebar
+Root: HKA; Subkey: "Software\Classes\Directory\shell\Notepad9"; ValueType: string; ValueName: ""; ValueData: "{cm:OpenFolderIn}"; Flags: uninsdeletekey; Tasks: contextmenu
+Root: HKA; Subkey: "Software\Classes\Directory\shell\Notepad9"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\{#AppExe}"",0"; Tasks: contextmenu
+Root: HKA; Subkey: "Software\Classes\Directory\shell\Notepad9\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"" ""%1"""; Tasks: contextmenu
+Root: HKA; Subkey: "Software\Classes\Directory\Background\shell\Notepad9"; ValueType: string; ValueName: ""; ValueData: "{cm:OpenFolderIn}"; Flags: uninsdeletekey; Tasks: contextmenu
+Root: HKA; Subkey: "Software\Classes\Directory\Background\shell\Notepad9"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\{#AppExe}"",0"; Tasks: contextmenu
+Root: HKA; Subkey: "Software\Classes\Directory\Background\shell\Notepad9\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"" ""%V"""; Tasks: contextmenu
 
 ; ---- the 1.x version could start hidden at sign-in; 2.0 does not need it
 Root: HKA; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: none; ValueName: "Notepad9"; Flags: deletevalue

@@ -46,6 +46,19 @@ pub fn maximize(hwnd: isize) {
     }
 }
 
+/// Move a file or folder to the Recycle Bin (no Windows prompt; the app asks first).
+pub fn recycle(path: &std::path::Path) -> bool {
+    use std::os::windows::ffi::OsStrExt;
+    use windows_sys::Win32::UI::Shell::*;
+    let mut from: Vec<u16> = path.as_os_str().encode_wide().collect();
+    from.extend([0, 0]); // the list ends with two zeros
+    let mut op: SHFILEOPSTRUCTW = unsafe { std::mem::zeroed() };
+    op.wFunc = FO_DELETE;
+    op.pFrom = from.as_ptr();
+    op.fFlags = (FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT | FOF_NOERRORUI) as u16;
+    unsafe { SHFileOperationW(&mut op) == 0 && op.fAnyOperationsAborted == 0 }
+}
+
 pub fn allow_foreground() {
     unsafe {
         AllowSetForegroundWindow(u32::MAX);

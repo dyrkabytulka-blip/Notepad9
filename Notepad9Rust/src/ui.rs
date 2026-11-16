@@ -66,11 +66,15 @@ impl eframe::App for App {
             _ => true,
         };
         let tabs_bottom = self.s.theme.tab_position == "Bottom";
-        if tabs_visible && !tabs_bottom {
-            self.tab_bar(ctx, &mut cmds, false);
-        }
         if self.s.show_status_bar {
             self.status_bar(ctx, &mut cmds);
+        }
+        // the sidebar runs from the toolbar down to the status bar; tabs sit right of it
+        if self.s.show_sidebar {
+            self.sidebar_panel(ctx, &mut cmds);
+        }
+        if tabs_visible && !tabs_bottom {
+            self.tab_bar(ctx, &mut cmds, false);
         }
         if tabs_visible && tabs_bottom {
             self.tab_bar(ctx, &mut cmds, true);
@@ -89,6 +93,7 @@ impl eframe::App for App {
         self.plugins_windows(ctx);
         self.plugin_manager_window(ctx);
         self.completion_popup(ctx);
+        self.palette_window(ctx, &mut cmds);
 
         for c in cmds {
             self.exec(&c);
@@ -181,6 +186,12 @@ impl App {
                     }
                 }
                 "copy_path" => self.ctx.copy_text(v.to_string()),
+                "open_dir_at" => self.set_folder(std::path::Path::new(v)),
+                "theme" => {
+                    self.s.theme.preset = v.to_string();
+                    self.s.theme.colors.clear();
+                    self.theme_dirty = true;
+                }
                 "fav_remove" => self.s.favorites.retain(|f| f != v),
                 "plugin_cmd" => {
                     if let Some((pi, cmd)) = v.split_once(':') {
@@ -316,6 +327,9 @@ impl App {
                     self.mi(ui, cmds, "New Tab", "Ctrl+T", Some("new"), true, "new");
                     self.mi(ui, cmds, "New Window", "Ctrl+Shift+N", Some("window_new"), true, "window_new");
                     self.mi(ui, cmds, "Open...", "Ctrl+O", Some("open"), true, "open");
+                    self.mi(ui, cmds, "Open Folder...", "", None, true, "open_dir");
+                    let has_root = !self.s.sidebar_root.is_empty();
+                    self.mi(ui, cmds, "Close Folder", "", None, has_root, "close_dir");
                     self.mi(ui, cmds, "Reload", "Ctrl+R", None, t_has_path, "reload");
                     ui.menu_button(crate::widgets::sub(ui, "Recent Files"), |ui| {
                         let recent = self.s.recent.clone();
@@ -422,6 +436,10 @@ impl App {
                     self.mc(ui, cmds, "Focused View", "Ctrl+Alt+F", fv, "focus");
                 });
                 ui.menu_button("View", |ui| {
+                    self.mi(ui, cmds, "Command Palette...", "Ctrl+Shift+P", None, true, "palette");
+                    let side = self.s.show_sidebar;
+                    self.mc(ui, cmds, "Sidebar (Explorer)", "Ctrl+Shift+E", side, "sidebar");
+                    ui.separator();
                     let s = &self.s;
                     let items = [("Toolbar", "", s.show_toolbar, "toggle_toolbar"), ("Status Bar", "", s.show_status_bar, "toggle_status"),
                         ("Console", "Ctrl+`", self.console.visible, "console"), ("Markdown Preview", "Ctrl+Shift+V", s.md_preview, "md_preview"),
