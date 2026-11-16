@@ -1,0 +1,4 @@
+# Windows batch and Inno Setup scripts need CRLF
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.iss text eol=crlf

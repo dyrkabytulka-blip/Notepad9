@@ -1,0 +1,9 @@
+[package]
+name = "notepad9_plugin"
+version = "1.0.0"
+edition = "2021"
+license = "MIT"
+description = "SDK for Notepad9 plugins (plugin.dll written in Rust)"
+
+[lib]
+path = "src/lib.rs"

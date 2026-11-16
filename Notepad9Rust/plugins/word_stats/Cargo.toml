@@ -1,0 +1,13 @@
+[package]
+name = "word_stats"
+version = "1.0.0"
+edition = "2021"
+license = "MIT"
+description = "Notepad9 plugin: live word / character / line statistics in a side panel"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+notepad9_plugin = { path = "../../plugin-sdk" }

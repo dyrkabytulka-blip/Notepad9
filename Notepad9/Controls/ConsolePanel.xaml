@@ -1,0 +1,42 @@
+<UserControl x:Class="Notepad9.Controls.ConsolePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:Notepad9.Controls"
+             xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit">
+    <DockPanel Background="{DynamicResource ConsoleBg}">
+        <!-- header -->
+        <Border DockPanel.Dock="Top" Height="27" Background="{DynamicResource PanelBg}" BorderBrush="{DynamicResource Line}" BorderThickness="0,1,0,1">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="0,0,4,0" VerticalAlignment="Center">
+                    <Button x:Name="RunBtn" Style="{StaticResource ToolButton}" Content="{c:Ico run}" ToolTip="Run current file (F5)" Click="Run_Click"/>
+                    <Button x:Name="StopBtn" Style="{StaticResource ToolButton}" Content="{c:Ico stop}" ToolTip="Stop (kills the running program and restarts the shell)" Click="Stop_Click"/>
+                    <Control Style="{StaticResource ToolSeparator}"/>
+                    <Button Style="{StaticResource ToolButton}" Content="{c:Ico open}" ToolTip="Go to the folder of the current file" Click="Cd_Click"/>
+                    <Button Style="{StaticResource ToolButton}" Content="{c:Ico clear}" ToolTip="Clear (Ctrl+L)" Click="Clear_Click"/>
+                    <Control Style="{StaticResource ToolSeparator}"/>
+                    <Button Style="{StaticResource CaptionButton}" Width="26" Height="25" ToolTip="Hide console (Ctrl+`)" Click="Close_Click">
+                        <Path Data="M0,0 L8,8 M8,0 L0,8" Stroke="{DynamicResource Text}" StrokeThickness="1.1"/>
+                    </Button>
+                </StackPanel>
+                <TextBlock Text="CONSOLE" Foreground="{DynamicResource TextDim}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,8,1"/>
+                <TextBlock x:Name="StateText" Foreground="#6E6E6E" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,1" TextTrimming="CharacterEllipsis"/>
+            </DockPanel>
+        </Border>
+
+        <!-- input line -->
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource PanelBg}" BorderBrush="{DynamicResource Line}" BorderThickness="0,1,0,0">
+            <DockPanel>
+                <TextBlock Text="&#x276F;" Foreground="#6EE05A" FontFamily="Consolas" FontSize="13" VerticalAlignment="Center" Margin="9,0,4,1"/>
+                <TextBox x:Name="Input" FontFamily="Consolas" FontSize="13" BorderThickness="0" Background="Transparent" Foreground="{DynamicResource ConsoleFg}"
+                         MinHeight="26" Padding="2,0" PreviewKeyDown="Input_PreviewKeyDown"
+                         ToolTip="Type a command and press Enter. Up/Down: history. Ctrl+L: clear."/>
+            </DockPanel>
+        </Border>
+
+        <!-- output -->
+        <ae:TextEditor x:Name="Output" IsReadOnly="True" FontFamily="Consolas" FontSize="13"
+                       Background="{DynamicResource ConsoleBg}" Foreground="{DynamicResource ConsoleFg}" Padding="8,4,0,4"
+                       HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                       WordWrap="True" ShowLineNumbers="False"/>
+    </DockPanel>
+</UserControl>

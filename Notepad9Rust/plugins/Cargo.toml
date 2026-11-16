@@ -1,0 +1,11 @@
+# Example Notepad9 plugins. Build: cargo build --release  (DLLs in plugins\target\release)
+[workspace]
+members = ["word_stats", "todo_list", "text_tools"]
+resolver = "2"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true
+# keep the default panic = "unwind": the SDK turns a panic into an error message instead of a crash

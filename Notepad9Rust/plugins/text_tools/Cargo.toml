@@ -1,0 +1,13 @@
+[package]
+name = "text_tools"
+version = "1.0.0"
+edition = "2021"
+license = "MIT"
+description = "Notepad9 plugin: Base64, URL, JSON, HTML and line tools"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+notepad9_plugin = { path = "../../plugin-sdk" }

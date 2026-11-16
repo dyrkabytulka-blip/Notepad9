@@ -1,0 +1,17 @@
+# Rust build output
+target/
+
+# .NET build output
+bin/
+obj/
+.vs/
+*.user
+
+# Published builds and installers
+publish/
+installer/output/
+
+# Misc
+__pycache__/
+*.pyc
+Thumbs.db
